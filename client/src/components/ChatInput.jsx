@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { SendHorizontal } from "lucide-react";
 
 function ChatInput({ onSend }) {
   const [message, setMessage] = useState("");
@@ -11,10 +12,11 @@ function ChatInput({ onSend }) {
   };
 
   return (
-    <div className="flex gap-3 p-4 border-t bg-white">
+    <div className="bg-white border-t p-5 flex gap-4">
+
       <input
-        className="flex-1 border rounded-xl px-4 py-3 outline-none"
-        placeholder="Type your message..."
+        className="flex-1 rounded-full border px-6 py-4 outline-none"
+        placeholder="Ask anything..."
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         onKeyDown={(e) => {
@@ -24,10 +26,11 @@ function ChatInput({ onSend }) {
 
       <button
         onClick={handleSend}
-        className="bg-blue-600 text-white px-6 rounded-xl hover:bg-blue-700"
+        className="bg-blue-600 text-white rounded-full px-8 hover:bg-blue-700 transition"
       >
-        Send
+        <SendHorizontal size={20} />
       </button>
+
     </div>
   );
 }
