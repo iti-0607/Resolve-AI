@@ -18,47 +18,41 @@ function ChatPage() {
 
   const handleSend = async (text) => {
     setChatStarted(true);
-
-    setMessages(prev => [
-      ...prev,
+  
+    const updatedMessages = [
+      ...messages,
       {
         sender: "user",
         text,
       },
-    ]);
+    ];
+  
+    setMessages(updatedMessages);
   
     setLoading(true);
   
     try {
+      const data = await sendMessage(updatedMessages);
   
-      const data = await sendMessage(text);
-  
-      setMessages(prev => [
-        ...prev,
+      setMessages([
+        ...updatedMessages,
         {
           sender: "bot",
           text: data.reply,
         },
       ]);
-  
     } catch {
-  
-      setMessages(prev => [
-        ...prev,
+      setMessages([
+        ...updatedMessages,
         {
           sender: "bot",
           text: "Something went wrong.",
         },
       ]);
-  
     } finally {
-  
       setLoading(false);
-  
     }
-  
   };
-
   const handleQuickAction = (prompt) => {
     handleSend(prompt);
   };

@@ -13,44 +13,37 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 app.post("/chat", async (req, res) => {
   try {
-    const { message } = req.body;
+    const { messages } = req.body;
 
-    
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.5-flash",
-      });
+      model: "gemini-2.5-flash",
+    });
 
-      
+    const conversation = messages
+      .map((msg) => `${msg.sender}: ${msg.text}`)
+      .join("\n");
 
-const prompt = `
+    const prompt = `
 You are ResolveAI, an AI-powered Customer Care Executive.
 
 Your responsibilities:
 
-• Help customers with:
-  - Order tracking
-  - Refund requests
-  - Payment issues
-  - Delivery delays
-  - Returns
-  - Account support
+- Help customers with order tracking.
+- Handle payment issues.
+- Assist with refunds and returns.
+- Help with delivery delays.
+- Support account-related queries.
 
 Rules:
 
-• Be polite and empathetic.
-
-• Keep replies under 80 words.
-
-• Never invent order numbers or payment status.
-
-• If you need more information,
-ask one question at a time.
-
-• If customer sounds angry,
-apologize first.
-
-• If issue cannot be solved,
-recommend creating a support ticket.
+- Always be polite.
+- Be empathetic.
+- Keep replies under 80 words.
+- Never invent order IDs.
+- Never invent payment status.
+- Ask only ONE follow-up question at a time.
+- If the customer sounds frustrated, apologize first.
+- If the issue requires human intervention, tell them you can create a support ticket.
 
 Conversation:
 
@@ -59,19 +52,19 @@ ${conversation}
 Reply only as ResolveAI.
 `;
 
-const result =
-await model.generateContent(prompt);
+    const result = await model.generateContent(prompt);
 
-    const response = result.response.text();
+    const reply = result.response.text();
 
     res.json({
-      reply: response,
+      reply,
     });
+
   } catch (error) {
-    console.log(error);
+    console.error(error);
 
     res.status(500).json({
-      error: "Something went wrong",
+      error: "Something went wrong.",
     });
   }
 });
