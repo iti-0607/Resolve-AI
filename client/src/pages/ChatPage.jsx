@@ -4,6 +4,7 @@ import ChatBox from "../components/ChatBox";
 import ChatInput from "../components/ChatInput";
 import { sendMessage } from "../services/api";
 import Header from "../components/Header";
+import WelcomeScreen from "../components/WelcomeScreen";
 
 function ChatPage() {
   const [loading, setLoading] = useState(false);
@@ -13,8 +14,10 @@ function ChatPage() {
       text: "Hello 👋 I'm ResolveAI. How may I help you today?",
     },
   ]);
+  const [chatStarted, setChatStarted] = useState(false);
 
   const handleSend = async (text) => {
+    setChatStarted(true);
 
     setMessages(prev => [
       ...prev,
@@ -56,6 +59,10 @@ function ChatPage() {
   
   };
 
+  const handleQuickAction = (prompt) => {
+    handleSend(prompt);
+  };
+
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -66,10 +73,19 @@ function ChatPage() {
   
         <Header />
   
-        <ChatBox
-   messages={messages}
-   loading={loading}
-/>
+  
+{
+  chatStarted ? (
+    <ChatBox
+      messages={messages}
+      loading={loading}
+    />
+  ) : (
+    <WelcomeScreen
+      onQuickAction={handleQuickAction}
+    />
+  )
+}
   
         <ChatInput onSend={handleSend} />
   

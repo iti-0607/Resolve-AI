@@ -3,6 +3,7 @@ import {
   useEffect,
   useRef,
 } from "react";
+import TypingIndicator from "./TypingIndicator";
 
 function ChatBox({
   messages,
@@ -25,14 +26,9 @@ function ChatBox({
           text={msg.text}
         />
       ))}
-      {
-  loading && (
-    <Message
-      sender="bot"
-      text="Typing..."
-    />
-  )
-}
+      
+{loading && <TypingIndicator />}
+
 <div ref={bottomRef}></div>
 
     </div>
