@@ -19,13 +19,16 @@ function ChatBox({
   }, [messages, loading]);
   return (
     <div className="flex-1 overflow-y-auto px-8 py-8 bg-gradient-to-b from-slate-100 to-white">
-      {messages.map((msg, index) => (
+      {
+      messages.map((msg, index) => (
         <Message
           key={index}
           sender={msg.sender}
           text={msg.text}
+          analysis={msg.analysis}
         />
-      ))}
+      ))
+      }
       
 {loading && <TypingIndicator />}
 

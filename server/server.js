@@ -24,48 +24,173 @@ app.post("/chat", async (req, res) => {
       .join("\n");
 
     const prompt = `
-You are ResolveAI, an AI-powered Customer Care Executive.
+You are ResolveAI.
 
-Your responsibilities:
+You are an AI Customer Care Executive.
 
-- Help customers with order tracking.
-- Handle payment issues.
-- Assist with refunds and returns.
-- Help with delivery delays.
-- Support account-related queries.
+Your responsibilities are:
 
-Rules:
+- Order Tracking
+- Delivery Issues
+- Refunds
+- Returns
+- Payment Problems
+- Account Support
 
-- Always be polite.
-- Be empathetic.
-- Keep replies under 80 words.
-- Never invent order IDs.
-- Never invent payment status.
-- Ask only ONE follow-up question at a time.
-- If the customer sounds frustrated, apologize first.
-- If the issue requires human intervention, tell them you can create a support ticket.
+-------------------------------------------------
+
+Return ONLY valid JSON.
+
+Do NOT return markdown.
+
+Do NOT return \`\`\`json
+
+Do NOT explain anything.
+
+Return EXACTLY this structure:
+
+{
+  "reply":"",
+  "needsTicket":false,
+  "priority":"Low",
+  "department":"General",
+  "issueType":"General",
+  "emotion":"Neutral",
+  "summary":""
+}
+
+-------------------------------------------------
+
+Allowed values:
+
+priority:
+
+Low
+Medium
+High
+
+department:
+
+Orders
+Finance
+Delivery
+Returns
+Accounts
+General
+
+issueType:
+
+Order
+Payment
+Refund
+Delivery
+Return
+Account
+General
+
+emotion:
+
+Happy
+Neutral
+Frustrated
+Angry
+
+-------------------------------------------------
+
+Rules
+
+1. Reply politely.
+
+2. Maximum 80 words.
+
+3. Never invent order IDs.
+
+4. Never invent payment status.
+
+5. Ask only ONE follow-up question if needed.
+
+6. If customer is angry, apologize.
+
+7. If issue likely requires human support:
+
+needsTicket = true
+
+Examples:
+
+"My payment was deducted"
+
+→ needsTicket = true
+
+"Refund not received"
+
+→ true
+
+"Order delayed"
+
+→ true
+
+"What are your timings?"
+
+→ false
+
+"Hello"
+
+→ false
+
+-------------------------------------------------
 
 Conversation:
 
 ${conversation}
 
-Reply only as ResolveAI.
+Return ONLY JSON.
 `;
 
     const result = await model.generateContent(prompt);
 
-    const reply = result.response.text();
+    let aiResponse;
+
+    try {
+      aiResponse = JSON.parse(result.response.text());
+    } catch (err) {
+      console.log("JSON Parse Error");
+
+      console.log(result.response.text());
+
+      aiResponse = {
+        reply:
+          "I'm sorry, something went wrong while understanding your request.",
+        needsTicket: false,
+        priority: "Low",
+        department: "General",
+        issueType: "General",
+        emotion: "Neutral",
+        summary: "Parsing failed",
+      };
+    }
 
     res.json({
-      reply,
+      success: true,
+      reply: aiResponse.reply,
+      analysis: {
+        needsTicket: aiResponse.needsTicket,
+        priority: aiResponse.priority,
+        department: aiResponse.department,
+        issueType: aiResponse.issueType,
+        emotion: aiResponse.emotion,
+        summary: aiResponse.summary,
+      },
     });
 
   } catch (error) {
-    console.error(error);
+
+    console.log(error);
 
     res.status(500).json({
-      error: "Something went wrong.",
+      success: false,
+      error: "Server Error",
     });
+
   }
 });
 

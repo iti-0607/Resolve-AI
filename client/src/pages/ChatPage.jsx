@@ -14,8 +14,8 @@ function ChatPage() {
       text: "Hello 👋 I'm ResolveAI. How may I help you today?",
     },
   ]);
-  const [chatStarted, setChatStarted] = useState(false);
 
+  const [chatStarted, setChatStarted] = useState(false);
   const handleSend = async (text) => {
     setChatStarted(true);
   
@@ -28,7 +28,6 @@ function ChatPage() {
     ];
   
     setMessages(updatedMessages);
-  
     setLoading(true);
   
     try {
@@ -39,20 +38,24 @@ function ChatPage() {
         {
           sender: "bot",
           text: data.reply,
+          analysis: data.analysis, // ✅ Store analysis with the bot message
         },
       ]);
-    } catch {
+    } catch (error) {
+      console.error(error);
+  
       setMessages([
         ...updatedMessages,
         {
           sender: "bot",
-          text: "Something went wrong.",
+          text: "Sorry, something went wrong.",
         },
       ]);
     } finally {
       setLoading(false);
     }
   };
+   
   const handleQuickAction = (prompt) => {
     handleSend(prompt);
   };
@@ -70,16 +73,20 @@ function ChatPage() {
   
 {
   chatStarted ? (
+<>
     <ChatBox
       messages={messages}
       loading={loading}
     />
+   
+    </>
   ) : (
     <WelcomeScreen
       onQuickAction={handleQuickAction}
     />
   )
 }
+
   
         <ChatInput onSend={handleSend} />
   
