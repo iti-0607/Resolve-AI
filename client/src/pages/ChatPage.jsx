@@ -5,6 +5,8 @@ import ChatInput from "../components/ChatInput";
 import { sendMessage } from "../services/api";
 import Header from "../components/Header";
 import WelcomeScreen from "../components/WelcomeScreen";
+import { createTicket } from "../services/api";
+import TicketCard from "../components/TicketCard";
 
 function ChatPage() {
   const [loading, setLoading] = useState(false);
@@ -14,6 +16,7 @@ function ChatPage() {
       text: "Hello 👋 I'm ResolveAI. How may I help you today?",
     },
   ]);
+  const [ticket, setTicket] = useState(null);
 
   const [chatStarted, setChatStarted] = useState(false);
   const handleSend = async (text) => {
@@ -61,6 +64,17 @@ function ChatPage() {
   };
 
 
+  const handleCreateTicket = async (analysis) => {
+    try {
+      const data = await createTicket(analysis);
+  
+      setTicket(data.ticket);
+  
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div className="flex h-screen bg-gray-100">
   
@@ -74,12 +88,22 @@ function ChatPage() {
 {
   chatStarted ? (
 <>
+    
+    
     <ChatBox
-      messages={messages}
-      loading={loading}
+        messages={messages}
+        loading={loading}
+        onCreateTicket={handleCreateTicket}
     />
+
+    {ticket && (
+        <div className="px-8 pb-6">
+            <TicketCard ticket={ticket} />
+        </div>
+    )}
+</>
    
-    </>
+    
   ) : (
     <WelcomeScreen
       onQuickAction={handleQuickAction}

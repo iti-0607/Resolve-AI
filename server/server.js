@@ -193,6 +193,25 @@ Return ONLY JSON.
 
   }
 });
+app.post("/create-ticket", (req, res) => {
+
+  const { analysis } = req.body;
+
+  const ticket = {
+    id: "RA-" + Math.floor(1000 + Math.random() * 9000),
+    status: "Open",
+    priority: analysis.priority,
+    department: analysis.department,
+    issueType: analysis.issueType,
+    createdAt: new Date().toLocaleString(),
+  };
+
+  res.json({
+    success: true,
+    ticket,
+  });
+
+});
 
 app.listen(5000, () => {
   console.log("Server running on port 5000");

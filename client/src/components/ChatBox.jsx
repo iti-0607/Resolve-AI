@@ -1,38 +1,36 @@
 import Message from "./Message";
-import {
-  useEffect,
-  useRef,
-} from "react";
+import { useEffect, useRef } from "react";
 import TypingIndicator from "./TypingIndicator";
 
 function ChatBox({
   messages,
   loading,
-}){
+  onCreateTicket,
+}) {
   const bottomRef = useRef(null);
-  useEffect(() => {
 
+  useEffect(() => {
     bottomRef.current?.scrollIntoView({
       behavior: "smooth",
     });
-  
   }, [messages, loading]);
+
   return (
     <div className="flex-1 overflow-y-auto px-8 py-8 bg-gradient-to-b from-slate-100 to-white">
-      {
-      messages.map((msg, index) => (
+
+      {messages.map((msg, index) => (
         <Message
           key={index}
           sender={msg.sender}
           text={msg.text}
           analysis={msg.analysis}
+          onCreateTicket={onCreateTicket}
         />
-      ))
-      }
-      
-{loading && <TypingIndicator />}
+      ))}
 
-<div ref={bottomRef}></div>
+      {loading && <TypingIndicator />}
+
+      <div ref={bottomRef}></div>
 
     </div>
   );

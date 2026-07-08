@@ -1,6 +1,6 @@
 import AnalysisCard from "./AnalysisCard";
 
-function Message({ sender, text, analysis }) {
+  function Message({ sender, text, analysis, onCreateTicket }) {
   const isUser = sender === "user";
 
   return (
@@ -25,7 +25,10 @@ function Message({ sender, text, analysis }) {
         </div>
 
         {!isUser && analysis && (
-          <AnalysisCard analysis={analysis} />
+          <AnalysisCard
+  analysis={analysis}
+  onCreateTicket={() => onCreateTicket(analysis)}
+/>
         )}
 
       </div>
