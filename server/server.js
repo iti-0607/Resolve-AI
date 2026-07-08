@@ -1,3 +1,4 @@
+const db = require("./config/firebase");
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
@@ -193,24 +194,34 @@ Return ONLY JSON.
 
   }
 });
-app.post("/create-ticket", (req, res) => {
+app.post("/create-ticket", async (req, res) => {
+  try {
+    const { analysis } = req.body;
 
-  const { analysis } = req.body;
+    const ticket = {
+      id: "RA-" + Math.floor(1000 + Math.random() * 9000),
+      status: "Open",
+      priority: analysis.priority,
+      department: analysis.department,
+      issueType: analysis.issueType,
+      createdAt: new Date().toISOString(),
+    };
 
-  const ticket = {
-    id: "RA-" + Math.floor(1000 + Math.random() * 9000),
-    status: "Open",
-    priority: analysis.priority,
-    department: analysis.department,
-    issueType: analysis.issueType,
-    createdAt: new Date().toLocaleString(),
-  };
+    await db.collection("tickets").doc(ticket.id).set(ticket);
 
-  res.json({
-    success: true,
-    ticket,
-  });
+    res.json({
+      success: true,
+      ticket,
+    });
 
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      error: "Failed to create ticket",
+    });
+  }
 });
 
 app.listen(5000, () => {
