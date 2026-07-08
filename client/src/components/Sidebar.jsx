@@ -6,34 +6,44 @@ import {
   Bot,
 } from "lucide-react";
 
+import { NavLink } from "react-router-dom";
+
 function Sidebar() {
+
   const items = [
+
     {
       name: "Chats",
       icon: MessageSquare,
-      active: true,
+      path: "/",
     },
+
     {
       name: "Tickets",
       icon: Ticket,
-      active: false,
+      path: "/tickets",
     },
+
     {
       name: "Dashboard",
       icon: LayoutDashboard,
-      active: false,
+      path: "/dashboard",
     },
+
     {
       name: "Settings",
       icon: Settings,
-      active: false,
+      path: "/settings",
     },
+
   ];
 
   return (
+
     <div className="w-72 bg-slate-950 text-white flex flex-col">
 
       {/* Logo */}
+
       <div className="p-7 border-b border-slate-800">
 
         <h1 className="text-4xl font-bold">
@@ -58,27 +68,31 @@ function Sidebar() {
 
             return (
 
-              <div
+              <NavLink
+
                 key={item.name}
-                className={`
 
-                flex
-                items-center
-                gap-4
-                px-4
-                py-3
-                rounded-xl
-                cursor-pointer
-                transition-all
-                duration-300
+                to={item.path}
 
-                ${
-                  item.active
-                    ? "bg-blue-600 shadow-lg"
-                    : "hover:bg-slate-800 hover:translate-x-2"
+                className={({ isActive }) =>
+
+                  `flex
+                  items-center
+                  gap-4
+                  px-4
+                  py-3
+                  rounded-xl
+                  transition-all
+                  duration-300
+
+                  ${
+                    isActive
+                      ? "bg-blue-600 shadow-lg"
+                      : "hover:bg-slate-800 hover:translate-x-2"
+                  }`
+
                 }
 
-                `}
               >
 
                 <Icon size={20} />
@@ -87,16 +101,17 @@ function Sidebar() {
                   {item.name}
                 </span>
 
-              </div>
+              </NavLink>
 
             );
+
           })}
 
         </div>
 
       </div>
 
-      {/* Bottom Card */}
+      {/* Bottom */}
 
       <div className="p-5 border-t border-slate-800">
 
@@ -125,7 +140,9 @@ function Sidebar() {
       </div>
 
     </div>
+
   );
+
 }
 
 export default Sidebar;

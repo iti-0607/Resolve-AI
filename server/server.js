@@ -1,4 +1,4 @@
-const db = require("./config/firebase");
+const { db, admin } = require("./config/firebase");
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
@@ -194,17 +194,28 @@ Return ONLY JSON.
 
   }
 });
+
 app.post("/create-ticket", async (req, res) => {
   try {
     const { analysis } = req.body;
 
+    // Generate professional ticket ID
+    const today = new Date();
+
+    const date =
+      today.getFullYear().toString() +
+      String(today.getMonth() + 1).padStart(2, "0") +
+      String(today.getDate()).padStart(2, "0");
+
+    const random = Math.floor(1000 + Math.random() * 9000);
+
     const ticket = {
-      id: "RA-" + Math.floor(1000 + Math.random() * 9000),
+      id: `RA-${date}-${random}`,
       status: "Open",
       priority: analysis.priority,
       department: analysis.department,
       issueType: analysis.issueType,
-      createdAt: new Date().toISOString(),
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
     };
 
     await db.collection("tickets").doc(ticket.id).set(ticket);
@@ -221,6 +232,88 @@ app.post("/create-ticket", async (req, res) => {
       success: false,
       error: "Failed to create ticket",
     });
+  }
+});
+app.get("/tickets", async (req, res) => {
+  try {
+
+    const snapshot = await db
+      .collection("tickets")
+      .orderBy("createdAt", "desc")
+      .get();
+
+    const tickets = snapshot.docs.map(doc => doc.data());
+
+    res.json({
+      success: true,
+      tickets,
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      error: "Failed to fetch tickets",
+    });
+
+  }
+});
+
+app.get("/dashboard-stats", async (req, res) => {
+  try {
+
+    const snapshot = await db.collection("tickets").get();
+
+    const tickets = snapshot.docs.map(doc => doc.data());
+
+    const totalTickets = tickets.length;
+
+    const openTickets = tickets.filter(
+      ticket => ticket.status === "Open"
+    ).length;
+
+    const highPriority = tickets.filter(
+      ticket => ticket.priority === "High"
+    ).length;
+
+    const departments = [...new Set(
+      tickets.map(ticket => ticket.department)
+    )].length;
+
+    const recentTickets = tickets
+      
+      .sort((a, b) => {
+        if (!a.createdAt || !b.createdAt) return 0;
+      
+        return (
+          b.createdAt.toMillis() -
+          a.createdAt.toMillis()
+        );
+      })
+      .slice(0, 5);
+
+    res.json({
+      success: true,
+      stats: {
+        totalTickets,
+        openTickets,
+        highPriority,
+        departments,
+        recentTickets,
+      },
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      error: "Failed to fetch dashboard stats",
+    });
+
   }
 });
 

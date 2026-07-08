@@ -19,3 +19,15 @@ export const createTicket = async (analysis) => {
 
   return response.data;
 };
+
+export const getTickets = async () => {
+  const response = await axios.get(`${API}/tickets`);
+
+  return response.data;
+};
+
+export const getDashboardStats = async () => {
+  const response = await axios.get(`${API}/dashboard-stats`);
+
+  return response.data;
+};
