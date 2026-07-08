@@ -37,7 +37,9 @@ function TicketItem({ ticket, onSelect }) {
           <span>{ticket.status}</span>
   
           <span>
-            {new Date(ticket.createdAt).toLocaleDateString()}
+            {ticket.createdAt?.seconds
+  ? new Date(ticket.createdAt.seconds * 1000).toLocaleDateString()
+  : "-"}
           </span>
   
         </div>

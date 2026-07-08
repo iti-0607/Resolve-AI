@@ -217,13 +217,18 @@ app.post("/create-ticket", async (req, res) => {
       issueType: analysis.issueType,
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
     };
-
     await db.collection("tickets").doc(ticket.id).set(ticket);
 
+    const savedTicket = await db
+      .collection("tickets")
+      .doc(ticket.id)
+      .get();
+    
     res.json({
       success: true,
-      ticket,
+      ticket: savedTicket.data(),
     });
+    
 
   } catch (error) {
     console.error(error);
@@ -293,17 +298,31 @@ app.get("/dashboard-stats", async (req, res) => {
         );
       })
       .slice(0, 5);
+      const departmentCount = {};
+
+tickets.forEach(ticket => {
+  departmentCount[ticket.department] =
+    (departmentCount[ticket.department] || 0) + 1;
+});
+
+const topDepartment =
+  Object.entries(departmentCount)
+    .sort((a, b) => b[1] - a[1])[0];
 
     res.json({
       success: true,
-      stats: {
-        totalTickets,
-        openTickets,
-        highPriority,
-        departments,
-        recentTickets,
+        stats: {
+          totalTickets,
+          openTickets,
+          highPriority,
+          departments,
+          recentTickets,
+          departmentCount,
+          topDepartment,
+        
       },
     });
+    
 
   } catch (error) {
 

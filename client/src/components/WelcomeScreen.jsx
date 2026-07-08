@@ -11,25 +11,25 @@ import {
         title: "Track Order",
         description: "Check your order status and shipment updates.",
         icon: Package,
-        prompt: "I want to track my order.",
+        prompt: "I want to track my order. Can you help me check its current status?",
       },
       {
         title: "Payment Issue",
         description: "Resolve payment failures or transaction problems.",
         icon: CreditCard,
-        prompt: "I have a payment issue.",
+        prompt: "My payment was deducted but my order was not confirmed.",
       },
       {
         title: "Refund & Return",
         description: "Request refunds or return purchased items.",
         icon: RotateCcw,
-        prompt: "I want to request a refund.",
+        prompt: "I requested a refund but I haven't received it yet.",
       },
       {
         title: "Delivery Delay",
         description: "Report delayed or missing deliveries.",
         icon: Truck,
-        prompt: "My order delivery is delayed.",
+        prompt: "My order was supposed to arrive yesterday but it is still delayed."
       },
     ];
   
@@ -98,22 +98,35 @@ import {
             </h3>
   
             <div className="space-y-3">
+            <button
+  onClick={() => onQuickAction("My order is delayed.")}
+  className="w-full text-left bg-white rounded-xl p-4 shadow-sm border hover:bg-slate-50 transition"
+>
+  📦 My order is delayed.
+</button>
+
+<button
+  onClick={() => onQuickAction("Payment deducted but order failed.")}
+  className="w-full text-left bg-white rounded-xl p-4 shadow-sm border hover:bg-slate-50 transition"
+>
+  💳 Payment deducted but order failed.
+</button>
+
+<button
+  onClick={() => onQuickAction("I haven't received my refund.")}
+  className="w-full text-left bg-white rounded-xl p-4 shadow-sm border hover:bg-slate-50 transition"
+>
+  ↩ I haven't received my refund.
+</button>
+
+<button
+  onClick={() => onQuickAction("I want to change my delivery address.")}
+  className="w-full text-left bg-white rounded-xl p-4 shadow-sm border hover:bg-slate-50 transition"
+>
+  🚚 Change my delivery address.
+</button>
+
   
-              <div className="bg-white rounded-xl p-4 shadow-sm border">
-                📦 My order is delayed.
-              </div>
-  
-              <div className="bg-white rounded-xl p-4 shadow-sm border">
-                💳 Payment deducted but order failed.
-              </div>
-  
-              <div className="bg-white rounded-xl p-4 shadow-sm border">
-                ↩ I haven't received my refund.
-              </div>
-  
-              <div className="bg-white rounded-xl p-4 shadow-sm border">
-                🚚 Change my delivery address.
-              </div>
   
             </div>
   

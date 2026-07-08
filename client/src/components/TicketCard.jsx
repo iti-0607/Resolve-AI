@@ -65,7 +65,11 @@ function TicketCard({ ticket }) {
             Created
           </span>
 
-          <strong>{ticket.createdAt}</strong>
+          <strong>
+  {ticket.createdAt?.seconds
+    ? new Date(ticket.createdAt.seconds * 1000).toLocaleString()
+    : "Just now"}
+</strong>
         </div>
 
       </div>
