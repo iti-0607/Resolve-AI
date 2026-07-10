@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react";
+
 import { getTickets } from "../services/api";
+
 import TicketList from "../components/TicketList";
+import TicketDetailsModal from "../components/TicketDetailsModal";
+
+import Sidebar from "../components/Sidebar";
+import Header from "../components/Header";
 
 function TicketsPage() {
 
   const [tickets, setTickets] = useState([]);
-
   const [loading, setLoading] = useState(true);
+
+  const [selectedTicket, setSelectedTicket] = useState(null);
 
   useEffect(() => {
 
@@ -34,26 +41,44 @@ function TicketsPage() {
 
   }, []);
 
-  if (loading)
-    return (
-      <div className="p-10">
-        Loading Tickets...
-      </div>
-    );
-
   return (
 
-    <div className="p-8">
+    <div className="flex h-screen bg-gray-100">
 
-      <h1 className="text-3xl font-bold mb-6">
+      <Sidebar />
 
-        Support Tickets
+      <div className="flex-1 flex flex-col">
 
-      </h1>
+        <Header />
 
-      <TicketList
-        tickets={tickets}
-        onSelect={(ticket) => console.log(ticket)}
+        <div className="flex-1 overflow-y-auto p-8">
+
+          <h1 className="text-3xl font-bold mb-6">
+            Support Tickets
+          </h1>
+
+          {loading ? (
+
+            <div className="text-gray-500">
+              Loading Tickets...
+            </div>
+
+          ) : (
+
+            <TicketList
+              tickets={tickets}
+              onSelect={setSelectedTicket}
+            />
+
+          )}
+
+        </div>
+
+      </div>
+
+      <TicketDetailsModal
+        ticket={selectedTicket}
+        onClose={() => setSelectedTicket(null)}
       />
 
     </div>

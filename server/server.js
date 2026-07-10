@@ -18,6 +18,11 @@ app.post("/chat", async (req, res) => {
 
     const model = genAI.getGenerativeModel({
       model: "gemini-2.5-flash",
+    
+      generationConfig: {
+        responseMimeType: "application/json",
+      },
+    
     });
 
     const conversation = messages
@@ -147,28 +152,44 @@ ${conversation}
 Return ONLY JSON.
 `;
 
+ 
+
     const result = await model.generateContent(prompt);
 
-    let aiResponse;
+let aiResponse;
 
-    try {
-      aiResponse = JSON.parse(result.response.text());
-    } catch (err) {
-      console.log("JSON Parse Error");
+try {
 
-      console.log(result.response.text());
+  let text = result.response.text();
 
-      aiResponse = {
-        reply:
-          "I'm sorry, something went wrong while understanding your request.",
-        needsTicket: false,
-        priority: "Low",
-        department: "General",
-        issueType: "General",
-        emotion: "Neutral",
-        summary: "Parsing failed",
-      };
-    }
+  console.log("Gemini Raw Response:");
+  console.log(text);
+
+  text = text
+    .replace(/```json/g, "")
+    .replace(/```/g, "")
+    .trim();
+
+  aiResponse = JSON.parse(text);
+
+} catch (err) {
+
+  console.log("JSON Parse Error");
+
+  console.log(err);
+
+  aiResponse = {
+    reply:
+      "I'm sorry, something went wrong while understanding your request.",
+    needsTicket: false,
+    priority: "Low",
+    department: "General",
+    issueType: "General",
+    emotion: "Neutral",
+    summary: "Parsing failed",
+  };
+
+}
 
     res.json({
       success: true,
@@ -198,6 +219,8 @@ Return ONLY JSON.
 app.post("/create-ticket", async (req, res) => {
   try {
     const { analysis } = req.body;
+    console.log("ANALYSIS RECEIVED:");
+console.log(analysis);
 
     // Generate professional ticket ID
     const today = new Date();
@@ -209,12 +232,24 @@ app.post("/create-ticket", async (req, res) => {
 
     const random = Math.floor(1000 + Math.random() * 9000);
 
+    
     const ticket = {
       id: `RA-${date}-${random}`,
+    
       status: "Open",
+    
       priority: analysis.priority,
+    
       department: analysis.department,
+    
       issueType: analysis.issueType,
+    
+      emotion: analysis.emotion,
+    
+      summary: analysis.summary,
+    
+      needsTicket: analysis.needsTicket,
+    
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
     };
     await db.collection("tickets").doc(ticket.id).set(ticket);
