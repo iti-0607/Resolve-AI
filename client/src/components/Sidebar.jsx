@@ -2,7 +2,6 @@ import {
   MessageSquare,
   Ticket,
   LayoutDashboard,
-  Settings,
   Bot,
 } from "lucide-react";
 
@@ -30,11 +29,7 @@ function Sidebar() {
       path: "/dashboard",
     },
 
-    {
-      name: "Settings",
-      icon: Settings,
-      path: "/settings",
-    },
+  
 
   ];
 
