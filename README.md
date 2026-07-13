@@ -1,6 +1,6 @@
 # 🤖 ResolveAI
 
-ResolveAI is an AI-powered Customer Care Platform that automates customer support using Google Gemini AI. It helps customers resolve common issues through an intelligent chatbot, automatically analyzes conversations, generates support tickets, and provides an admin dashboard for ticket management and analytics.
+ResolveAI is an AI-powered Customer Care Platform that automates customer support using Google Gemini AI. It helps customers resolve common issues through an intelligent chatbot, automatically analyzes conversations, generates structured support tickets, and provides a dashboard for ticket management and analytics.
 
 ---
 
@@ -25,10 +25,9 @@ ResolveAI is an AI-powered Customer Care Platform that automates customer suppor
 
 ### 🎫 Ticket Management
 - Automatic ticket creation
-- Professional ticket IDs
+- Professional ticket ID generation
 - Ticket history
 - Ticket details modal
-- Ticket status tracking
 - Firebase Firestore integration
 
 ### 📊 Dashboard
@@ -43,9 +42,9 @@ ResolveAI is an AI-powered Customer Care Platform that automates customer suppor
 - Modern responsive UI
 - Quick action cards
 - Typing indicator
-- Beautiful chat interface
-- Interactive dashboard
-- Premium ticket cards
+- Interactive chat interface
+- Dashboard analytics
+- Professional ticket cards
 
 ---
 
@@ -100,8 +99,6 @@ ResolveAI
 git clone https://github.com/iti-0607/Resolve-AI.git
 ```
 
----
-
 ## Frontend
 
 ```bash
@@ -109,8 +106,6 @@ cd client
 npm install
 npm run dev
 ```
-
----
 
 ## Backend
 
@@ -128,15 +123,13 @@ Create a `.env` file inside the `server` folder.
 
 ```env
 GEMINI_API_KEY=YOUR_GEMINI_API_KEY
-```
 
-Also configure Firebase Admin SDK:
+FIREBASE_PROJECT_ID=YOUR_FIREBASE_PROJECT_ID
 
-```
-server/config/firebase.js
-```
+FIREBASE_CLIENT_EMAIL=YOUR_FIREBASE_CLIENT_EMAIL
 
-and place your Firebase Service Account credentials accordingly.
+FIREBASE_PRIVATE_KEY=YOUR_FIREBASE_PRIVATE_KEY
+```
 
 ---
 
@@ -153,16 +146,16 @@ and place your Firebase Service Account credentials accordingly.
 # 💡 How It Works
 
 1. Customer starts a conversation with ResolveAI.
-2. Gemini AI understands the issue.
-3. AI analyzes:
+2. Google Gemini AI understands the customer's issue.
+3. The AI analyzes:
    - Issue Type
    - Priority
    - Customer Emotion
    - Department
-   - Summary
-4. If required, a support ticket is created automatically.
-5. Ticket is stored in Firebase Firestore.
-6. Support team can view tickets and analytics from the dashboard.
+   - AI Summary
+4. If the issue requires human assistance, a support ticket can be created.
+5. The ticket is stored securely in Firebase Firestore.
+6. Support teams can view tickets and analytics through the dashboard.
 
 ---
 
@@ -170,8 +163,8 @@ and place your Firebase Service Account credentials accordingly.
 
 - User Authentication
 - Admin & Customer Roles
+- Support Agent Workflow
 - Email Notifications
-- Ticket Status Workflow
 - Multi-language Support
 - Voice-based Customer Support
 - AI Knowledge Base Integration
@@ -180,6 +173,7 @@ and place your Firebase Service Account credentials accordingly.
 
 # 👨‍💻 Developed By
 
-**Iti**
+**Iti Agrawal**
 
-B.Tech CSE, SVNIT Surat
+B.Tech Computer Science & Engineering  
+SVNIT Surat
