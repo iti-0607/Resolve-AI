@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "http://localhost:5000";
+const API = "https://resolve-ai-backend-dm03.onrender.com";
 
 // Chat API
 export const sendMessage = async (messages) => {
@@ -20,12 +20,14 @@ export const createTicket = async (analysis) => {
   return response.data;
 };
 
+// Get Tickets
 export const getTickets = async () => {
   const response = await axios.get(`${API}/tickets`);
 
   return response.data;
 };
 
+// Dashboard Stats
 export const getDashboardStats = async () => {
   const response = await axios.get(`${API}/dashboard-stats`);
 
