@@ -1,8 +1,8 @@
+require("dotenv").config();
+
 const { db, admin } = require("./config/firebase");
 const express = require("express");
 const cors = require("cors");
-require("dotenv").config();
-
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const app = express();
