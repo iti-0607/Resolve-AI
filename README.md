@@ -4,6 +4,20 @@ ResolveAI is an AI-powered Customer Care Platform that automates customer suppor
 
 ---
 
+## 🌐 Live Demo
+
+**Frontend (Vercel):**  
+https://resolve-ai-psi.vercel.app
+
+**Backend (Render):**  
+https://resolve-ai-backend-dm03.onrender.com
+
+---
+
+## 🎥 Demo Video
+
+https://youtu.be/8X1ElRPI1ZM
+
 ## ✨ Features
 
 ### 🤖 AI Customer Support
@@ -61,6 +75,11 @@ ResolveAI is an AI-powered Customer Care Platform that automates customer suppor
 ## Backend
 - Node.js
 - Express.js
+
+## Deployment
+
+- Frontend: Vercel
+- Backend: Render
 
 ## AI
 - Google Gemini 2.5 Flash API
@@ -168,6 +187,11 @@ FIREBASE_PRIVATE_KEY=YOUR_FIREBASE_PRIVATE_KEY
 - Multi-language Support
 - Voice-based Customer Support
 - AI Knowledge Base Integration
+
+---
+## 📄 License
+
+This project was developed as part of a hackathon submission.
 
 ---
 
